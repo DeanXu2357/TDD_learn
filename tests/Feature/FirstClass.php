@@ -6,7 +6,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use DatabaseMigrations;
+use DatabaseMigrations as DB;
 
 class FirstClass extends TestCase
 {
@@ -18,5 +18,12 @@ class FirstClass extends TestCase
     public function testExample()
     {
         $this->assertTrue(true);
+    }
+
+    public function 取得水果列表()
+    {
+        $this->get('/api')->seeJson([
+            'Fruits' => 'Delicious and healthy!'
+        ]);
     }
 }
