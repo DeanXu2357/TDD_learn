@@ -26,4 +26,11 @@ class FirstClass extends TestCase
             'Fruits' => 'Delicious and healthy!'
         ]);
     }
+
+    public function 取得對應水果資料()
+    {
+        $this->seed('FruitsTableSeeder');
+        $this->get('/api/fruits')
+             ->seeJsonStructure();
+    }
 }
