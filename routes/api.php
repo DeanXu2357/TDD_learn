@@ -30,4 +30,5 @@ $api->version('v1', function ($api) {
     // });
 
     $api->get('/fruits', 'App\Http\Controllers\FruitsController@index');
+    $api->get('/fruit/{name}', 'App\Http\Controllers\FruitsController@show');
 });
