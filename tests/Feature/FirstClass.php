@@ -20,17 +20,29 @@ class FirstClass extends TestCase
         $this->assertTrue(true);
     }
 
-    public function 取得水果列表()
+    /**
+     * @test
+     */
+    public function getAllFruits()
     {
-        $this->get('/api')->seeJson([
+        $this->get('/api')->assertJson([
             'Fruits' => 'Delicious and healthy!'
         ]);
     }
 
-    public function 取得對應水果資料()
+    /**
+     * @test
+     */
+    public function getFetchFruits()
     {
         $this->seed('FruitsTableSeeder');
         $this->get('/api/fruits')
-             ->seeJsonStructure();
+             ->assertJsonStructure([
+                'data' => [
+                    '*' => [
+                         'name', 'color', 'weight', 'delicious'
+                    ]
+                ]
+             ]);
     }
 }
