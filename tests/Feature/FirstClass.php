@@ -35,7 +35,7 @@ class FirstClass extends TestCase
      */
     public function getFetchFruits()
     {
-        $this->seed('FruitsTableSeeder');
+        // $this->seed('FruitsTableSeeder');
         $this->get('/api/fruits')
              ->assertJsonStructure([
                 'data' => [
@@ -44,5 +44,16 @@ class FirstClass extends TestCase
                     ]
                 ]
              ]);
+    }
+
+    /**
+     * @test
+     */
+    public function getSpecificFruits()
+    {
+        $this->get('/api/fruit/banana')
+            ->assertJsonStructure([
+                'data' => ['id', 'name', 'color', 'weight', 'delicious']
+            ]);
     }
 }
