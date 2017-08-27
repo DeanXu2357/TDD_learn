@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Fruits;
+namespace App\Transformers;
 
 use App\Models\Fruits;
 use League\Fractal\TransformerAbstract;
 
 class FruitsTransformer extends TransformerAbstract
 {
-    public function transform(Fruit $fruit)
+    public function transform(Fruits $fruit)
     {
         return [
             'id'        => (int)$fruit->id,
