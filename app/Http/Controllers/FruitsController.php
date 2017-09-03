@@ -22,10 +22,10 @@ class FruitsController extends Controller
     {
         $fruit = Fruits::where('name', $name)->first();
 
-        if ($fruit) {
-            return $this->item($fruit, new FruitsTransformer);
+        if (!$fruit) {
+            return $this->response->errorNotFound();
         }
 
-        return $this->response->errorNotFound();
+        return $this->item($fruit, new FruitsTransformer);
     }
 }
