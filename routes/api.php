@@ -31,4 +31,9 @@ $api->version('v1', function ($api) {
 
     $api->get('/fruits', 'App\Http\Controllers\FruitsController@index');
     $api->get('/fruit/{name}', 'App\Http\Controllers\FruitsController@show');
+
+    # 認證使用者API
+    $api->post('authenticate', 'App\Http\Controllers\AuthenticateController@authenticate');
+    $api->post('logout', 'App\Http\Controllers\AuthenticateController@logout');
+    $api->get('token', 'App\Http\Controllers\AuthenticateController@getToken');
 });
