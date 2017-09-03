@@ -71,4 +71,26 @@ class AuthenticateController extends Controller
 
         return response()->json(compact('user'));
     }
+
+    /**
+     * 刷新token
+     *
+     * @return void
+     */
+    public function getToken()
+    {
+        $token = JWTAuth::getToken();
+
+        if (!$token) {
+            return $this->response->errorMethodNotAllowed('Token not provided');
+        }
+
+        try {
+            $refreshedToken = JWTAuth::refresh($token);
+        } catch (JWTException $e) {
+            return $thiss->response->errorInternal('Not able to refresh Token');
+        }
+
+        return $this->response->withArray(['token' => $refreshedToken]);
+    }
 }
