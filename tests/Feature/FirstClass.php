@@ -35,6 +35,7 @@ class FirstClass extends TestCase
      */
     public function getFetchFruits()
     {
+        // 註解掉是因為每次測試都會播種一次
         // $this->seed('FruitsTableSeeder');
         $this->get('/api/fruits')
              ->assertJsonStructure([
@@ -62,9 +63,33 @@ class FirstClass extends TestCase
      */
     public function authenticateUser()
     {
-        $user = factory(\App\Models\User::class)
-            ->create(['password' => bcrypt('foo')]);
+        // 用工廠新創一筆users資料 帳號隨機 密碼 foo
+        // TODO 缺點 每次執行測試都會創造一筆資料 之後找方法改進
+        // $user = factory(\App\Models\Users::class)
+        //     ->create(['password' => bcrypt('foo')]);
 
-        $this->post('/api/authenticate', ['email' => $user->email, 'password' => 'foo'])->assertJsonStructure(['token']);
+        // $this->post('/api/authenticate', ['email' => $user->email, 'password' => 'foo'])->assertJsonStructure(['token']);
+        $this->post('/api/authenticate', ['email' => 'jacobi.dan@example.net', 'password' => 'foo'])->assertJsonStructure(['token']);
+    }
+
+    /**
+     * @test
+     *
+     * Test: Post /api/fruits.
+     */
+    public function 創造新的水果()
+    {
+        // 用工廠新創一筆users資料 帳號隨機 密碼 foo
+        // TODO 缺點 每次執行測試都會創造一筆資料 之後找方法改進
+        // $user = factory(\App\Models\Users::class)
+        //     ->create(['password' => bcrypt('foo')]);
+        $this->post('/api/authenticate', ['email' => 'jacobi.dan@example.net', 'password' => 'foo'])->assertJsonStructure(['token']);
+
+        $fruit = ['name' => 'peache', 'color' => 'peache', 'weight' => '175', 'delicious' => true];
+
+        // $this->post('/api/fruits', $fruit, $this->headers($user)->seeStatusCode(201));
+
+        $response = $this->call('POST', '/api/frusits', $fruit);
+        $this->assertEquals(201, $response->status());
     }
 }
