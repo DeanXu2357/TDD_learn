@@ -13,4 +13,11 @@ class Fruits extends Model
      * @var string
      */
     protected $table = 'fruits';
+
+    /**
+     * 定義可被批量附值得欄位名
+     *
+     * @var array
+     */
+    protected $fillable = ['name', 'color', 'weight', 'delicious'];
 }
