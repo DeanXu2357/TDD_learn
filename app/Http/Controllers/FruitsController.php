@@ -28,4 +28,13 @@ class FruitsController extends Controller
 
         return $this->item($fruit, new FruitsTransformer);
     }
+
+    public function store(Requests\StoreFruitRequest $request)
+    {
+        if (Fruits::Create($request->all())) {
+            return $this->response->created();
+        }
+
+        return $this->response->errorBadRequest();
+    }
 }
