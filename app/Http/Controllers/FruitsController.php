@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Dingo\Api\Routing\Helpers;
 use App\Models\Fruits;
 use App\Transformers\FruitsTransformer;
+use App\Http\Requests\StoreFruitRequest;
 
 class FruitsController extends Controller
 {
@@ -29,7 +30,7 @@ class FruitsController extends Controller
         return $this->item($fruit, new FruitsTransformer);
     }
 
-    public function store(Requests\StoreFruitRequest $request)
+    public function store(StoreFruitRequest $request)
     {
         if (Fruits::Create($request->all())) {
             return $this->response->created();
