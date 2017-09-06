@@ -83,21 +83,15 @@ class FirstClass extends TestCase
      */
     public function 創造新的水果()
     {
-        // 用工廠新創一筆users資料 帳號隨機 密碼 foo
-        // TODO 缺點 每次執行測試都會創造一筆資料 之後找方法改進
-        // $user = factory(\App\Models\Users::class)
-        //     ->create(['password' => bcrypt('foo')]);
         $user = Users::where('email', 'jacobi.dan@example.net')->first();
 
-
+        // todo 這邊測試完資料不能寫入
         $fruit = ['name' => 'peache', 'color' => 'peache', 'weight' => '175', 'delicious' => true];
 
-        // $this->post('/api/fruits', $fruit, $this->headers($user))->seeStatusCode(201);
         $header = $this->headers($user);
         // TODO 這邊在header 裡放使用者資訊似乎不太優 ， 待之後改進
         $response = $this->call('POST', '/api/fruits', $fruit, [], [], $header);
 
-        // $this->assertEquals($header, []);
         $this->assertEquals(201, $response->status());
     }
 
@@ -107,7 +101,7 @@ class FirstClass extends TestCase
 
         if ($user) {
             $token = JWTAuth::fromUser($user);
-            //JWTAuth::setToken($token);
+            JWTAuth::setToken($token);
             $headers['HTTP_Authorization'] = 'Bearer '.$token;
         }
 
@@ -122,6 +116,6 @@ class FirstClass extends TestCase
         $fruit = Fruits::create(['name' => 'peache', 'color' => 'peache', 'weight' => '175', 'delicious' => true])->toArray();
 
         $response = $this->post('/api/fruits', $fruit);
-        $this->assertEquals('401', $response->status());
+        $this->assertEquals('400', $response->status());
     }
 }
