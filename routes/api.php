@@ -36,11 +36,13 @@ $api->version('v1', function ($api) {
     $api->post('authenticate', 'App\Http\Controllers\AuthenticateController@authenticate');
     $api->post('logout', 'App\Http\Controllers\AuthenticateController@logout');
     $api->get('token', 'App\Http\Controllers\AuthenticateController@getToken');
-});
 
-// todo 之後試著用$api->group()改寫放在上面
-$api->version('v1', ['middleware' => 'api.auth'], function ($api) {
-    $api->get('authenticated_user', 'App\Http\Controllers\AuthenticateController@authenticatedUser');
-    $api->post('fruits', 'App\Http\Controllers\FruitsController@store');
-    $api->delete('fruits/{id}', 'App\Http\Controllers\FruitsController@destroy');
+    $api->group(['middleware' => 'jwt.auth'], function ($api) {
+        $api->get('testtest', function () {
+            return 'plz work';
+        });
+        $api->get('authenticated_user', 'App\Http\Controllers\AuthenticateController@authenticatedUser');
+        $api->post('fruits', 'App\Http\Controllers\FruitsController@store');
+        $api->delete('fruits/{id}', 'App\Http\Controllers\FruitsController@destroy');
+    });
 });
