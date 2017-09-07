@@ -6,7 +6,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use DatabaseMigrations as DB;
+use DatabaseMigrations as DBM;
 
 use JWTAuth;
 use App\Models\Users;
@@ -14,6 +14,9 @@ use App\Models\Fruits;
 
 class FirstClass extends TestCase
 {
+    // use DatabaseTransactions;// transcation 的還原只能針對 query builder和 eloquent orm
+    use DatabaseMigrations; // 每次都會migration 所以每次都不會對db做紀錄 缺點就是每次test都會把DB資料洗掉
+
     /**
      * A basic test example.
      *
@@ -40,7 +43,8 @@ class FirstClass extends TestCase
     public function getFetchFruits()
     {
         // 註解掉是因為每次測試都會播種一次
-        // $this->seed('FruitsTableSeeder');
+        $this->seed('FruitsTableSeeder');
+
         $this->get('/api/fruits')
              ->assertJsonStructure([
                 'data' => [
@@ -56,6 +60,8 @@ class FirstClass extends TestCase
      */
     public function getSpecificFruits()
     {
+        $this->seed('FruitsTableSeeder');
+
         $this->get('/api/fruit/banana')
             ->assertJsonStructure([
                 'data' => ['id', 'name', 'color', 'weight', 'delicious']
@@ -69,11 +75,11 @@ class FirstClass extends TestCase
     {
         // 用工廠新創一筆users資料 帳號隨機 密碼 foo
         // TODO 缺點 每次執行測試都會創造一筆資料 之後找方法改進
-        // $user = factory(\App\Models\Users::class)
-        //     ->create(['password' => bcrypt('foo')]);
+        $user = factory(\App\Models\Users::class)
+            ->create(['password' => bcrypt('foo')]);
 
-        // $this->post('/api/authenticate', ['email' => $user->email, 'password' => 'foo'])->assertJsonStructure(['token']);
-        $this->post('/api/authenticate', ['email' => 'jacobi.dan@example.net', 'password' => 'foo'])->assertJsonStructure(['token']);
+        $this->post('/api/authenticate', ['email' => $user->email, 'password' => 'foo'])->assertJsonStructure(['token']);
+        // $this->post('/api/authenticate', ['email' => 'jacobi.dan@example.net', 'password' => 'foo'])->assertJsonStructure(['token']);
     }
 
     /**
@@ -83,13 +89,14 @@ class FirstClass extends TestCase
      */
     public function 創造新的水果()
     {
-        $user = Users::where('email', 'jacobi.dan@example.net')->first();
+        // $user = Users::where('email', 'jacobi.dan@example.net')->first();
+        $user = factory(\App\Models\Users::class)
+        ->create(['password' => bcrypt('foo')]);
 
         // todo 這邊測試完資料不能寫入
         $fruit = ['name' => 'peache', 'color' => 'peache', 'weight' => '175', 'delicious' => true];
 
         $header = $this->headers($user);
-        // TODO 這邊在header 裡放使用者資訊似乎不太優 ， 待之後改進
         $response = $this->call('POST', '/api/fruits', $fruit, [], [], $header);
 
         $this->assertEquals(201, $response->status());
