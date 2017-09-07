@@ -14,6 +14,10 @@ use App\Models\Fruits;
 
 class FirstClass extends TestCase
 {
+    /**
+     * DatabaseTransaction 的使用
+     * https://laravel.com/docs/5.4/database-testing#using-transactions
+     */
     // use DatabaseTransactions;// transcation 的還原只能針對 query builder和 eloquent orm
     use DatabaseMigrations; // 每次都會migration 所以每次都不會對db做紀錄 缺點就是每次test都會把DB資料洗掉
 
