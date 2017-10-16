@@ -129,4 +129,15 @@ class FirstClass extends TestCase
         $response = $this->post('/api/fruits', $fruit);
         $this->assertEquals('400', $response->status());
     }
+
+    /**
+     * @test
+     */
+    public function 註冊帳號()
+    {
+        $user = Users::create(['name' => 'poyu', 'email' => 'jasugun0000@gmail.com', 'password' => '123asd'])->toArray();
+
+        $response = $this->post('/api/register', ['name' => 'poyu', 'email' => 'jasugun0000@gmail.com', 'password' => '123asd']);
+        $this->assertEquals('200', $response->status());
+    }
 }
