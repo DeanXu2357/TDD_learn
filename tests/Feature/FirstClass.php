@@ -135,9 +135,7 @@ class FirstClass extends TestCase
      */
     public function 註冊帳號()
     {
-        $user = Users::create(['name' => 'poyu', 'email' => 'jasugun0000@gmail.com', 'password' => '123asd'])->toArray();
-
         $response = $this->post('/api/register', ['name' => 'poyu', 'email' => 'jasugun0000@gmail.com', 'password' => '123asd']);
-        $this->assertEquals('200', $response->status());
+        $this->assertEquals('201', $response->status());
     }
 }
