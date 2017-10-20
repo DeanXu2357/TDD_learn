@@ -37,7 +37,11 @@ $api->version('v1', function ($api) {
     $api->post('logout', 'App\Http\Controllers\AuthenticateController@logout');
     $api->get('token', 'App\Http\Controllers\AuthenticateController@getToken');
 
-    $api->post('/register', 'App\Http\Controllers\RegisterController@resgister');
+    # 使用者帳號
+    $api->put('/user', 'App\Http\Controllers\RegisterController@resgister');
+    $api->get('/user', 'App\Http\Controllers\UserController@index');
+    /*$api->delete();
+    $api->post();*/
 
     $api->group(['middleware' => 'jwt.auth'], function ($api) {
         $api->get('testtest', function () {

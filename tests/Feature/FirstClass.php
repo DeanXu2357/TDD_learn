@@ -135,7 +135,22 @@ class FirstClass extends TestCase
      */
     public function 註冊帳號()
     {
-        $response = $this->post('/api/register', ['name' => 'poyu', 'email' => 'jasugun0000@gmail.com', 'password' => '123asd']);
+        $response = $this->put('/api/user', ['name' => 'poyu', 'email' => 'jasugun0000@gmail.com', 'password' => '123asd']);
         $this->assertEquals('201', $response->status());
+    }
+
+    /**
+     * @test
+     */
+    public function 取得帳號列表()
+    {
+        //$response = $this->get('/api/user');
+        $this->get('/api/user')->assertJsonStructure([
+            'data' => [
+                '*' => [
+                     'id', 'name', 'email'
+                ]
+            ]
+        ]);
     }
 }
